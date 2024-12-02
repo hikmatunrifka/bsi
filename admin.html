@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Absen Page</title>
+    <link rel="stylesheet" href="absen.css">
+</head>
+<body>
+    <div class="profile-container">
+        <a class="btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="photo-card">
+                <img src="" alt="User Photo" id="userPhoto">
+                <span id="photoUsername" class="photo-username"></span>
+            </div>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" id="logoutButton">Keluar</a></li>
+          <li><a class="dropdown-item" href="download.html">Rekap Absen</a></li>
+          <li><a class="dropdown-item" href="register.html">Tambah Pegawai</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <h2>Absensi Pegawai BSI BA Lampriet</h2>
+            <p>Senin, 28 Oktober 2024</p>
+        </div>
+        <button id="absenButton" class="absen-button">Absen</button>
+        <p id="absenStatus"></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEe4nakmggzLYa7ZVOWlpiqWAEHcXN2jA",
+            authDomain: "bsi-absen.firebaseapp.com",
+            projectId: "bsi-absen",
+            storageBucket: "bsi-absen.appspot.com",
+            messagingSenderId: "144718640768",
+            appId: "1:144718640768:web:15d5fc765d12e776139865",
+            measurementId: "G-JV2FYDF7M8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const loggedInUsername = localStorage.getItem("loggedInUsername");
+        const loggedInnoID = localStorage.getItem("loggedInnoID");
+        const userPhotoURL = localStorage.getItem("userPhotoURL"); // Foto profil dari localStorage
+
+        if (loggedInUsername) {
+            document.getElementById("photoUsername").innerText = loggedInUsername;
+
+            // Tampilkan foto profil jika tersedia
+            if (userPhotoURL) {
+                document.getElementById("userPhoto").src = userPhotoURL;
+            } else {
+                document.getElementById("userPhoto").src = "default-profile.jpg"; // Fallback foto profil default
+            }
+        } else {
+            alert("Tidak ada pengguna yang login. Harap login terlebih dahulu.");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem("loggedInUsername");
+            localStorage.removeItem("loggedInnoID");
+            localStorage.removeItem("userPhotoURL"); // Hapus foto profil saat logout
+            window.location.href = "login.html";
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
